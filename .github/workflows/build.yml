@@ -18,7 +18,7 @@ on:
       Kernel_Git:
         required: true
         type: string
-        default: https://github.com/SchweGELBin/kernel_milk_davinci.git
+        default: https://github.com/Sogyia/kernel_xiaomi_sm6150.git
       Kernel_Branch:
         required: true
         type: string

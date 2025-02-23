@@ -37,8 +37,12 @@ jobs:
             sudo apt-get install git make bc bison
             sudo apt-get install openssl zip kmod cpio flex wget device-tree-compiler
             sudo apt-get install python3 python2 binutils
-            sudo apt-get install libelf-dev libssl-dev libtfm-dev ca-certificates binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi
-      - name: Build
+            sudo apt-get install perf libelf-dev libssl-dev libtfm-dev ca-certificates binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi
+            git clone --depth=1 https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r547379 "$HOME/clang"
+            echo "$HOME/clang/bin" >> $GITHUB_PATH
+            export KBUILD_COMPILER_STRING=$("$HOME/clang/bin/clang" --version | head -n 1 | perl -pe 's/http.*?//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
+            echo "KBUILD_COMPILER_STRING=$KBUILD_COMPILER_STRING" >> $GITHUB_ENV
+       - name: Build
         id: build
         run: |
             echo "Building ${{ inputs.include_ksu }}"

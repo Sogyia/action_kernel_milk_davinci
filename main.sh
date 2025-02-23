@@ -100,6 +100,16 @@ cd $WORKDIR
 # Setup
 msg "Setup"
 
+msg "Clang"
+
+git clone --depth=1 https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r547379 "$HOME/clang"
+
+export PATH="$HOME/clang/bin:$PATH"
+
+export KBUILD_COMPILER_STRING=$("$HOME/clang/bin/clang" --version | head -n 1 | perl -pe 's/http.*?//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
+
+echo "Clang version: $KBUILD_COMPILER_STRING"
+
 msg "Kernel"
 git clone --depth=1 $KERNEL_GIT -b $KERNEL_BRANCH $KERNEL_DIR
 

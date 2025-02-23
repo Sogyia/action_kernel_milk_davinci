@@ -100,16 +100,6 @@ cd $WORKDIR
 # Setup
 msg "Setup"
 
-msg "Clang"
-mkdir -p Clang
-aria2c -s16 -x16 -k1M $CLANG_DLINK -o Clang.tar.gz
-tar -C Clang/ -zxvf Clang.tar.gz
-rm -rf Clang.tar.gz
-
-CLANG_VERSION="$($CLANG_DIR/clang --version | head -n 1 | cut -f1 -d "(" | sed 's/.$//')"
-CLANG_VERSION=${CLANG_VERSION::-3} # May get removed later
-LLD_VERSION="$($CLANG_DIR/ld.lld --version | head -n 1 | cut -f1 -d "(" | sed 's/.$//')"
-
 msg "Kernel"
 git clone --depth=1 $KERNEL_GIT -b $KERNEL_BRANCH $KERNEL_DIR
 

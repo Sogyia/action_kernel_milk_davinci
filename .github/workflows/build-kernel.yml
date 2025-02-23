@@ -35,8 +35,8 @@ jobs:
             echo "Setting up the environment"
             sudo bash env.sh
             sudo apt-get install git make bc bison
-            openssl curl zip kmod cpio flex wget device-tree-compiler
-            python3 python2 binutils
+            sudo apt-get install openssl zip kmod cpio flex wget device-tree-compiler
+            sudo apt-get install python3 python2 binutils
       - name: Build
         id: build
         run: |

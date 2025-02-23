@@ -29,30 +29,35 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Environment
         id: env
         run: |
-            echo "Setting up the environment"
-            sudo bash env.sh
-            sudo apt-get install git make bc bison
-            sudo apt-get install openssl zip kmod cpio flex wget device-tree-compiler
-            sudo apt-get install python3 python2 binutils
-            sudo apt-get install perf libelf-dev libssl-dev libtfm-dev ca-certificates binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi
-            git clone --depth=1 https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r547379 "$HOME/clang"
-            echo "$HOME/clang/bin" >> $GITHUB_PATH
-            export KBUILD_COMPILER_STRING=$("$HOME/clang/bin/clang" --version | head -n 1 | perl -pe 's/http.*?//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
-            echo "KBUILD_COMPILER_STRING=$KBUILD_COMPILER_STRING" >> $GITHUB_ENV
-       - name: Build
+          echo "Setting up the environment"
+          sudo bash env.sh
+          sudo apt-get update
+          sudo apt-get install -y git make bc bison
+          sudo apt-get install -y openssl zip kmod cpio flex wget device-tree-compiler
+          sudo apt-get install -y python3 python2 binutils
+          sudo apt-get install -y perf libelf-dev libssl-dev libtfm-dev ca-certificates binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi
+          git clone --depth=1 https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r547379 "$HOME/clang"
+          echo "$HOME/clang/bin" >> $GITHUB_PATH
+          export KBUILD_COMPILER_STRING=$("$HOME/clang/bin/clang" --version | head -n 1 | perl -pe 's/http.*?//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
+          echo "KBUILD_COMPILER_STRING=$KBUILD_COMPILER_STRING" >> $GITHUB_ENV
+
+      - name: Build
         id: build
         run: |
-            echo "Building ${{ inputs.include_ksu }}"
-            sudo bash main.sh ${{ inputs.include_ksu }} ${{ inputs.kernel_git }} ${{ inputs.kernel_branch }} ${{ inputs.kernel_type }}
+          echo "Building ${{ inputs.include_ksu }}"
+          sudo bash main.sh ${{ inputs.include_ksu }} ${{ inputs.kernel_git }} ${{ inputs.kernel_branch }} ${{ inputs.kernel_type }}
+
       - name: Prepare Upload
         id: prepare
         run: |
           cd $GITHUB_WORKSPACE/out
           zip_name="$(ls *.zip)"
           echo "kernel_name=${zip_name::-4}" >> $GITHUB_ENV
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:

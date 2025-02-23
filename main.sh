@@ -100,14 +100,6 @@ cd $WORKDIR
 # Setup
 msg "Setup"
 
-msg "Tools"
-sudo apt-get update
-          sudo apt-get -qq install git make bc bison \
-          openssl curl zip kmod cpio flex libelf-dev \
-          libssl-dev libtfm-dev wget device-tree-compiler \
-          ca-certificates python3 python2 binutils \
-          binutils-aarch64-linux-gnu binutils-arm-linux-gnueabi
-
 msg "Clang"
 mkdir -p Clang
 aria2c -s16 -x16 -k1M $CLANG_DLINK -o Clang.tar.gz
